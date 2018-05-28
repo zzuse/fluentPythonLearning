@@ -288,3 +288,34 @@ for char in sample:
           unicodedata.name(char),                     # <7>
           sep='\t')
 # END NUMERICS_DEMO
+
+print('-' * 20)
+print('str versus bytes in re')
+
+re_numbers_str = re.compile(r'\d+')
+re_words_str = re.compile(r'\w+')
+re_numbers_bytes = re.compile(rb'\d+')
+re_words_bytes = re.compile(rb'\w+')
+
+text_str = ("Ramanujan saw \u0be7\u0bed\u0be8\u0bef"
+            " as 1729 = 1³ + 12³ = 9³ + 10³.")
+
+text_bytes = text_str.encode('utf_8')
+
+print('Text', repr(text_str), sep='\n   ')
+print('Numbers')
+print('   str  :', re_numbers_str.findall(text_str))
+print('   bytes:', re_numbers_bytes.findall(text_bytes))
+print('Words')
+print('   str  :', re_words_str.findall(text_str))
+print('   bytes:', re_words_bytes.findall(text_bytes))
+
+print('-' * 20)
+print('filename in os')
+
+print("listdir . {}".format(os.listdir('.')))
+print("listdir b. {}".format(os.listdir(b'.')))
+pi_name_bytes = os.listdir(b'.')[1]
+pi_name_str = pi_name_bytes.decode('ascii', 'surrogateescape')
+print(pi_name_str)
+print(pi_name_str.encode('ascii', 'surrogateescape'))

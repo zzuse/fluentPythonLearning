@@ -71,7 +71,9 @@ print("-----------function and class object difference--------")
 class C: pass
 obj= C()
 def func(): pass
-print(sorted(set(dir(func)) - set(dir(obj))))
+print("dir(func):{}".format(set(dir(func))))
+print("dir(obj):{}".format(set(dir(obj))))
+print("dir(func)-dir(obj):{}".format(sorted(set(dir(func)) - set(dir(obj)))))
 
 print("-----------function and class object difference--------")
 
@@ -106,10 +108,3 @@ def f(a,*,b):
     return a,b
 
 print(f(1,b=2))
-
-import bobo
-
-@bobo.query('/')
-def hello(person):
-    return 'Hello %s!' % person
-
