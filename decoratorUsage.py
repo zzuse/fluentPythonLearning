@@ -1,12 +1,16 @@
 
+print('----target----')
 def deco(func):
     def inner():
         print('running inner()')
-        return inner
+    return inner
 
 @deco
 def target():
     print('running target()')
+
+
+print('----registry before call main-----')
 
 registry = []
 def register(func):
@@ -26,6 +30,8 @@ def f3():
     print('running f3()')
 
 def main():
+    target()
+    print(target)
     print('running main()')
     print('registry ->', registry)
     f1()
@@ -43,8 +49,3 @@ def f(a):
 b = 6
 f(3)
 
-from datetime import datetime
-date_format = "%Y-%m-%dT%H:%M:%S.%f"
-datetime(1970, 1, 1)
-print(datetime.now()-None)
-print(datetime.strptime(datetime(1970, 1, 1).strftime(date_format), date_format))
