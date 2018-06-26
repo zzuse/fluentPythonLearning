@@ -29,4 +29,60 @@ print(htmlize({1,2,3}))
 print(htmlize(abs))
 print(htmlize('Heimlich & Co.\n- a game'))
 print(htmlize(42))
-print(htmlize(['alpha', 66, {3,2,1}])) 
+print(htmlize(['alpha', 66, {3,2,1}]))
+
+
+print("*" * 10)
+registry = []
+
+
+def register(func):
+    print('running register(%s)' % func)
+    registry.append(func)
+    return func
+
+@register
+def f1():
+    print('running f1()')
+
+
+print('running main()')
+print('registry ->', registry)
+f1()
+
+
+print('\n' + "*" * 10 + "decorator parameters" + "*" * 10 +'\n')
+
+registry = set()
+
+
+def register(active=True):
+    def decorate(func):
+        print('running register(active=%s)->decorate(%s)' % (active, func))
+        if active:
+            registry.add(func)
+        else:
+            registry.discard(func)
+
+        return func
+    return decorate
+
+
+@register(active=False)
+def f1():
+    print('running f1()')
+
+
+@register()
+def f2():
+    print('running f2()')
+
+
+def f3():
+    print('running f3()')
+
+print(registry)
+register()(f3)
+print(registry)
+register(active=False)(f2)
+print(registry)
