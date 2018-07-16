@@ -4,6 +4,7 @@ import math
 import numbers
 import functools
 import operator
+import itertools
 
 class MySeq:
     def __getitem__(self, index):
@@ -84,6 +85,7 @@ class Vector:
         return cls(memv)
 
     shortcut_names = 'xyzt'
+
     def __getattr__(self, name):
         cls = type(self)
         if len(name) == 1:
@@ -107,6 +109,28 @@ class Vector:
                 raise AttributeError(msg)
         super().__setattr__(name, value)
 
+    def angle(self, n):
+        r = math.sqrt(sum(x * x for x in self[n:]))
+        a = math.atan2(r, self[n-1])
+        if (n == len(self) - 1) and (self[-1] < 0):
+            return math.pi * 2 - a
+        else:
+            return a
+
+    def angles(self):
+        return (self.angle(n) for n in range(1, len(self)))
+
+    def __format__(self, fmt_spec=''):
+        if fmt_spec.endswith('h'):
+            fmt_spec = fmt_spec[:-1]
+            coords = itertools.chain([abs(self)], self.angles())
+            outer_fmt = '<{}>'
+        else:
+            coords = self
+            outer_fmt = '({})'
+        components = (format(c, fmt_spec) for c in coords)
+        return outer_fmt.format(', '.join(components))
+
 
 print("Vector([3.1, 4.2])\n{}\n----------".format(Vector([3.1, 4.2])))
 print("Vector((3, 4, 5))\n{}\n----------".format(Vector((3, 4, 5))))
@@ -128,6 +152,27 @@ print("v.x\n{}\n----------".format(v.x))
 v.A = 10
 print("assign v.x to 10: \nv.x is {}\n----------".format(v.x))
 print("tricky v is not changed: {}\n----------".format(v))
+v1 = Vector([3, 4])
+print("format(v1) {}\n----------".format(v1))
+print(format(v1, '.2f'))
+print(format(v1, '.3e'))
+print("----------")
+v3 = Vector([3, 4, 5])
+print(format(v3))
+print(format(Vector(range(7))))
+print("----------")
+print(format(Vector([1, 1]), 'h'))
+print(format(Vector([1, 1]), '.3eh'))
+print(format(Vector([1, 1]), '.5fh'))
+print("----------")
+print(format(Vector([1, 1, 1]), 'h'))
+print(format(Vector([2, 2, 2]), '.3eh'))
+print(format(Vector([0, 0, 0]), '.5fh'))
+print("----------")
+print(format(Vector([-1, -1, -1, -1]), 'h'))
+print(format(Vector([2, 2, 2, 2]), '.3eh'))
+print(format(Vector([0, 1, 0, 0]), '.5fh'))
+print("----------")
 
 
 print("functools.reduce 5! is {}\n----------".format(functools.reduce(lambda a,b: a*b, range(1, 6))))
@@ -151,6 +196,17 @@ print("list(zip(range(3), 'ABC', [0.0, 1.1, 2,2, 3.3])) is {} \n----------".form
 from itertools import zip_longest
 print("list(zip_longest(range(3), 'ABC', [0.0, 1.1, 2.2, 3.3], fillvalue = -1)) is {}\n----------".format(list(zip_longest(range(3), 'ABC', [0.0, 1.1, 2.2, 3.3], fillvalue = -1))))
 
+my_list = [[1, 2, 3], [40, 50, 60], [9, 8, 7]]
+a = functools.reduce(lambda a, b: a+b[1], my_list, 0)
+print("lambda sum second value {}".format(a))
+
+import numpy as np
+my_array = np.array(my_list)
+a = np.sum(my_array[:, 1])
+print("using numpy to sum second value {}".format(a))
+
+a = functools.reduce(operator.add, [sub[1] for sub in my_list], 0)
+print("using operator to sum second value {}".format(a))
 
 
 
