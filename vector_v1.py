@@ -131,6 +131,24 @@ class Vector:
         components = (format(c, fmt_spec) for c in coords)
         return outer_fmt.format(', '.join(components))
 
+    def __abs__(self):
+        return math.sqrt(sum(x*x for x in self))
+
+    def __neg__(self):
+        return Vector(-x for x in self)
+
+    def __pos__(self):
+        return Vector(self)
+
+    def __add__(self, other):
+        try:
+            pairs = itertools.zip_longest(self, other, fillvalue=0.0)
+            return Vector(a+b for a, b in pairs)
+        except TypeError:
+            return NotImplemented
+
+    def __radd__(self, other):
+        return self + other
 
 print("Vector([3.1, 4.2])\n{}\n----------".format(Vector([3.1, 4.2])))
 print("Vector((3, 4, 5))\n{}\n----------".format(Vector((3, 4, 5))))
@@ -209,5 +227,33 @@ a = functools.reduce(operator.add, [sub[1] for sub in my_list], 0)
 print("using operator to sum second value {}".format(a))
 
 
+import decimal
+ctx = decimal.getcontext()
+ctx.prec = 40
+one_third = decimal.Decimal('1')/decimal.Decimal('3')
+print("decimal.Decimal('1')/decimal.Decimal('3')  = {}\n".format(one_third))
+print("one_third = +one_third = {}\n".format(one_third == +one_third))
+ctx.prec = 28
+print("ctx.prec = 28 one_third = +one_third = {}\n-------------".format(one_third == +one_third))
+print("+one_third= {}\n--------------".format(+one_third))
 
+v1 = Vector([3, 4, 5])
+v2 = Vector([6, 7, 8])
+print(v1 + v2)
+print(v1 + v2 == Vector([3+6, 4+7, 5+8]))
 
+v1 = Vector([3, 4, 5])
+print(v1 + (10, 20, 30))
+
+from vector2d_v3 import Vector2d
+v2d = Vector2d(1, 2)
+print(v1 + v2d)
+
+print((10, 20, 30) + v1)
+
+from vector2d_v3 import Vector2d
+v2d = Vector2d(1, 2)
+print(v2d + v1)
+
+print(v1 + 1)
+print(v1 + 'ABC')
