@@ -11,3 +11,5 @@ dummy
 cat_tinted.jpg
 foo*
 downloads/
+*.db
+*.pickle
