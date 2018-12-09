@@ -2,33 +2,40 @@ symbols = '$¢£¥€¤'
 codes = []
 for symbol in symbols:
     codes.append(ord(symbol))
-print(codes)
+print("$¢£¥€¤ unicodes {}\n----------".format(codes))
+
 
 codes2 = [ord(symbol) for symbol in symbols]
-print(codes2)
+print("$¢£¥€¤ unicodes 2 {}\n----------".format(codes2))
+
 
 x = 'ABC'
+# loal variable do not mast from surrounding scope
 dummy = [ord(x) for x in x]
-print(x)
-print(dummy)
+print("x {}\n----------".format(x))
+print("[ord(x) for x in x] {}\n----------".format(dummy))
+
 
 beyond_ascii = [ord(s) for s in symbols if ord(s) > 127]
-print(beyond_ascii)
+print("[ord(s) for s in symbols if ord(s) > 127] {}\n----------".format(beyond_ascii))
+
 
 beyond_ascii = list(filter(lambda c:c>127,map(ord,symbols)))
-print(beyond_ascii)
+print("list(filter(lambda c:c>127,map(ord,symbols))) {}\n----------".format(beyond_ascii))
+
 
 colors =['black','white']
 sizes = ['S','M','L']
 tshirts = [(color,size) for color in colors for size in sizes]
-print(tshirts)
+print("tshirts (color,size) {}\n----------".format(tshirts))
+
 for color in colors:
     for size in sizes:
         print((color,size))
 
 tshirts = [(color,size) for size in sizes
                         for color in colors]
-print(tshirts)
+print("tshirts (color,size) {}\n----------".format(tshirts))
 
 '''generator'''
 print("--------------- generator------------")
@@ -37,22 +44,30 @@ for tshirt in ('%s %s' % (c,s) for c in colors for s in sizes):
     print(tshirt)
 
 a = tuple(ord(symbol) for symbol in symbols)
-print(a)
+print("init tuple from generator {}\n----------".format(a))
+
 
 import array
+# I storage type
 b = array.array('I',(ord(symbol) for symbol in symbols))
-print(b)
+print("init array from generator {}\n----------".format(b))
+
 
 print("--------------- Slices------------")
 
 l = [10,20,30,40,50,60]
-print(l[:2])
-print(l[2:])
+print("10,20,30,40,50,60 l[:2] {}\n----------".format(l[:2]))
+
+print("l[2:] {}\n----------".format(l[2:]))
+
 
 s = 'bicycle'
-print(s[::3])
-print(s[::-1])
-print(s[::-2])
+print("bicycle s[::3] {}\n----------".format(s[::3]))
+
+print("s[::-1] {}\n----------".format(s[::-1]))
+
+print("s[::-2] {}\n----------".format(s[::-2]))
+
 
 invoice = """
 0     6                                40          52 55
@@ -73,21 +88,29 @@ for item in line_times:
 '''assigning to Slices'''
 print("--------------- assigning to Slices------------")
 l = list(range(10))
-print(l)
+print("list(range(10)) {}\n----------".format(l))
+
 l[2:5]=[20,30]
-print(l)
+print("l[2:5]=[20,30] {}\n----------".format(l))
+
 del l[5:7]
+print("del l[5:7] {}\n----------".format(l))
+
 l[3::2] = [11,22]
-print(l)
+print("l[3::2] = [11,22] {}\n----------".format(l))
+
 l[2:5] = [100]
 print(l)
+print("l[2:5] = [100] {}\n----------".format(l))
+
 
 '''+ and *'''
 print("--------------- + and *------------")
 
-l = [1,2,3]
-print(l*5)
-print(5*'abcd')
+print("[1,2,3] * 5 = {}\n----------".format([1,2,3] * 5))
+
+print("5 *'abcd' = {}\n----------".format(5*'abcd'))
+
 
 '''lists of lists'''
 print("---------------lists of lists------------")
@@ -121,15 +144,21 @@ print(board)
 print("---------------*= usage------------")
 
 l = [1,2,3]
-print(id(l))
-l *= 2
-print(l)
-print(id(l))
-t = (1,2,3)
-print(id(t))
-t *= 2
-print(id(t))
+print("l = [1,2,3] id(l) {}\n----------".format(id(l)))
 
+# mutable not change ID
+l *= 2
+print("l *= 2 {}\n----------".format(l))
+print("id(l) {}\n----------".format(id(l)))
+
+t = (1,2,3)
+print("t = (1,2,3) id(t) {}\n----------".format(id(t)))
+
+# immutable will change ID
+t *= 2
+print("t *= 2 {}\n----------".format(id(t)))
+
+# bytecode Python
 import dis
 dis.dis('s[a] += b')
 
@@ -137,13 +166,21 @@ dis.dis('s[a] += b')
 print("---------------list sort------------")
 
 fruits = ['grape','raspbeerry', 'apple', 'banana']
-print(sorted(fruits))
-print(sorted(fruits,reverse=True))
-print(sorted(fruits,key=len))
-print(sorted(fruits,key=len,reverse=True))
-print(fruits)
+print("fruit = {}".format(['grape','raspbeerry', 'apple', 'banana']))
+
+print("sorted(fruits) {}\n----------".format(sorted(fruits)))
+
+print("sorted(fruits,reverse=True) {}\n----------".format(sorted(fruits,reverse=True)))
+
+print("sorted(fruits,key=len) {}\n----------".format(sorted(fruits,key=len)))
+
+print("sorted(fruits,key=len,reverse=True) {}\n----------".format(sorted(fruits,key=len,reverse=True)))
+
+print("fruits {}\n----------".format(fruits))
+
 fruits.sort()
-print(fruits)
+print("fruits.sort() {}\n----------".format(fruits))
+
 
 '''bisect usage'''
 print("---------------bisect usage------------")
@@ -157,7 +194,7 @@ def demo(bisect_fn):
     for needle in reversed(NEEDLES):
         position = bisect_fn(HAYSTACK, needle)
         offset = position * '  |'
-        print(ROW_FMT.format(needle,position, offset))
+        print(ROW_FMT.format(needle, position, offset))
 
 if __name__  == '__main__':
     if sys.argv[-1] == 'left':
@@ -173,6 +210,8 @@ def grade(score, breakpoints = [60,70,80,90],grades='FDCBA'):
     i = bisect.bisect(breakpoints,score)
     return grades[i]
 
+print("get grades in score [F-60-D-70-C-80-B-90-A]")
+print("[33,99,77,70,89,90,200]")
 print([grade(score) for score in [33,99,77,70,89,90,200]])
 
 print("---------------bisect.insort usage------------")
